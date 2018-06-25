@@ -11,7 +11,7 @@ namespace SampleClientApplicationForIoTHubSdkInterface
     {
         static void Main(string[] args)
         {
-            Endpoint endpoint = new Endpoint("HostName=afhassan-iothub.azure-devices.net;SharedAccessKeyName=iothubowner;SharedAccessKey=ZqKX5O4OxGf2RNzzZwsIqgV4hYMO9qI3nMJI8SWGcM0=", "AftDeviceId1");
+            Endpoint endpoint = new Endpoint("<enter IoT hub connection string>", "<enter device id>");
 
             using (LibSdk libSdk = new LibSdk())
             {
