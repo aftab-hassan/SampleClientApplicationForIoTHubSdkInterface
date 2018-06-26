@@ -11,7 +11,7 @@ namespace SampleClientApplicationForIoTHubSdkInterface
     {
         static void Main(string[] args)
         {
-            Endpoint endpoint = new Endpoint("<enter IoT hub connection string>", "<enter device id>");
+            Endpoint endpoint = new Endpoint("HostName=afhassan-iothub.azure-devices.net;SharedAccessKeyName=iothubowner;SharedAccessKey=ZqKX5O4OxGf2RNzzZwsIqgV4hYMO9qI3nMJI8SWGcM0=", "AftDeviceId1");
 
             using (LibSdk libSdk = new LibSdk())
             {
@@ -21,7 +21,7 @@ namespace SampleClientApplicationForIoTHubSdkInterface
                 Console.WriteLine("printing result : " + deviceInfo.Result.PrimaryKeyConnectionString);
 
                 // Use case 2 - Send message from device to cloud
-                List<Telemetry> data = new List<Telemetry>();
+                List<TelemetryData> data = new List<TelemetryData>();
                 Dictionary<string, string> dictionary = new Dictionary<string, string>();//first message
                 dictionary.Add("deviceId", "0");
                 dictionary.Add("messageId", "1");
@@ -37,29 +37,31 @@ namespace SampleClientApplicationForIoTHubSdkInterface
                 dictionary2.Add("messageId", "___111");
                 dictionary2.Add("temperature", "___98.666");
                 dictionary2.Add("humidity", "___99.999");
-                Telemetry telemetry = new Telemetry(dictionary);
-                Telemetry telemetry1 = new Telemetry(dictionary1);
-                Telemetry telemetry2 = new Telemetry(dictionary2);
-                data.Add(telemetry);
-                data.Add(telemetry1);
-                data.Add(telemetry2);
+                TelemetryData telemetryData = new TelemetryData(dictionary);
+                TelemetryData telemetryData1 = new TelemetryData(dictionary1);
+                TelemetryData telemetryData2 = new TelemetryData(dictionary2);
+                data.Add(telemetryData);
+                data.Add(telemetryData1);
+                data.Add(telemetryData2);
                 Task<Result> sendMessageResult = libSdk.SendMessageD2CAsync(deviceInfo.Result, data, LibSdk.TransportType.Amqp);
                 Console.WriteLine("boolean flag : " + sendMessageResult.Result.IsSuccessful + ", reason : " + sendMessageResult.Result.Reason);
 
                 // Use case 3 - Receive desired property change from cloud to device
-                libSdk.ReceiveC2DDesiredPropertyChangeAsync(deviceInfo.Result, OnDesiredPropertyChanged).GetAwaiter().GetResult();
+                libSdk.ReceiveC2DDesiredPropertyChangeAsync(deviceInfo.Result, OnDesiredPropertyChanged, LibSdk.TransportType.Mqtt).GetAwaiter().GetResult();
 
                 Console.ReadLine();
                 Console.WriteLine("done!");
             }
         }
 
-        private static async Task OnDesiredPropertyChanged(Microsoft.Azure.Devices.Shared.TwinCollection desiredProperties, object userContext)
+        private static async Task OnDesiredPropertyChanged(Dictionary<string, string> desiredProperties)
         {
-            Console.WriteLine("desired property change:");
+            Console.WriteLine("desired property change");
 
-            await Task.Delay(100);
-            return;
+            foreach(KeyValuePair<string, string> pair in desiredProperties)
+            {
+                Console.WriteLine("key : " + pair.Key + ", " + pair.Value);
+            }
         }
     }
 }
