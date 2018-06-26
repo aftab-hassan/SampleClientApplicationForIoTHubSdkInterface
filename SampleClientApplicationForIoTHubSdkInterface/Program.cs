@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using IoTHubSdkInterface;
+using LibIoTHubSdkWrapper;
 
 namespace SampleClientApplicationForIoTHubSdkInterface
 {
@@ -13,10 +13,10 @@ namespace SampleClientApplicationForIoTHubSdkInterface
         {
             Endpoint endpoint = new Endpoint("HostName=afhassan-iothub.azure-devices.net;SharedAccessKeyName=iothubowner;SharedAccessKey=ZqKX5O4OxGf2RNzzZwsIqgV4hYMO9qI3nMJI8SWGcM0=", "AftDeviceId1");
 
-            using (LibSdk libSdk = new LibSdk())
+            using (IoTHubSdkWrapper wrapper = new IoTHubSdkWrapper())
             {
                 // Use case 1 - Add a device
-                Task<DeviceInfo> deviceInfo = libSdk.AddDeviceAsync(endpoint);
+                Task<DeviceInfo> deviceInfo = wrapper.AddDeviceAsync(endpoint);
                 //deviceInfo.Wait();
                 Console.WriteLine("printing result : " + deviceInfo.Result.PrimaryKeyConnectionString);
 
@@ -43,11 +43,11 @@ namespace SampleClientApplicationForIoTHubSdkInterface
                 data.Add(telemetryData);
                 data.Add(telemetryData1);
                 data.Add(telemetryData2);
-                Task<Result> sendMessageResult = libSdk.SendMessageD2CAsync(deviceInfo.Result, data, LibSdk.TransportType.Amqp);
+                Task<Result> sendMessageResult = wrapper.SendMessageD2CAsync(deviceInfo.Result, data, IoTHubSdkWrapper.TransportType.Amqp);
                 Console.WriteLine("boolean flag : " + sendMessageResult.Result.IsSuccessful + ", reason : " + sendMessageResult.Result.Reason);
 
                 // Use case 3 - Receive desired property change from cloud to device
-                libSdk.ReceiveC2DDesiredPropertyChangeAsync(deviceInfo.Result, OnDesiredPropertyChanged, LibSdk.TransportType.Mqtt).GetAwaiter().GetResult();
+                wrapper.ReceiveC2DDesiredPropertyChangeAsync(deviceInfo.Result, OnDesiredPropertyChanged, IoTHubSdkWrapper.TransportType.Mqtt).GetAwaiter().GetResult();
 
                 Console.ReadLine();
                 Console.WriteLine("done!");

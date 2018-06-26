@@ -50,8 +50,9 @@
     <Reference Include="DotNetty.Transport, Version=0.4.7.0, Culture=neutral, PublicKeyToken=bc13ca065fa06c29, processorArchitecture=MSIL">
       <HintPath>..\packages\DotNetty.Transport.0.4.7\lib\net45\DotNetty.Transport.dll</HintPath>
     </Reference>
-    <Reference Include="IoTHubSdkInterface">
-      <HintPath>..\..\IoTHubSdkInterface\IoTHubSdkInterface\bin\Debug\IoTHubSdkInterface.dll</HintPath>
+    <Reference Include="IoTHubSdkInterface, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\IoTHubSdkInterface\IoTHubSdkInterface\bin\Release\IoTHubSdkInterface.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Azure.Amqp, Version=2.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Azure.Amqp.2.2.0\lib\net45\Microsoft.Azure.Amqp.dll</HintPath>
